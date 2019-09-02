@@ -1,0 +1,46 @@
+server:
+  port: 9000
+  debug: False
+  remote_access: True
+database:
+  pgsql:
+    type: postgres
+    host: 127.0.0.1
+    port: 2222
+    user: root
+    password: 123456
+    database: postgis_23_sample
+datasource:
+  data1:
+    type: pgsql
+    location: databse
+    sql: select * from amap where createtime betweent "2019-09-01" and "2019-09-02"
+    columns:
+  data2:
+    type: file
+    location: D:\wyd\dedupe_test1\spider\xx.csv
+    columns:
+  data3:
+    type: file
+    location: D:\wyd\dedupe_test1\spider\xx.csv
+    columns:
+matchzone:
+  # 主数据源，数据依归
+  primary: data1
+  columns:
+    # 主键，唯一识别记录
+    pkey:
+      data1: id
+      data2: id
+      data3: poiid
+    comp:
+      data1: name,tpye,address,location
+      data2: name,type,,location
+      data3: name,ptype,location
+  rules:
+    is_duplicate:
+      rule1: name,address
+      rule2:
+    is_not:
+      rule1: distance > 500
+
